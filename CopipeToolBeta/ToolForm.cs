@@ -14,28 +14,50 @@ using static CopipeToolBeta.Data.DataSchema;
 
 namespace CopipeToolBeta
 {
-	public partial class Form1 : Form
+	public partial class ToolForm : Form
 	{
 		private readonly List<CopipeData> datasource = new List<CopipeData>();
 
-		public Form1()
+        #region ctor
+        public ToolForm()
 		{
 			InitializeComponent();
 		}
+        #endregion
 
 		#region Load
-		private void Form1_Load( object sender, EventArgs e )
+		private void Form_Load( object sender, EventArgs e )
 		{
-			string xml = File.ReadAllText("Data/dat.xml");
+            try
+            {
+#warning パスは外部定義化した方がいい。
+#warning 相対パス起点も念の為exeのLocation拾って来るか。
+                string path = "Data/dat.xml";
 
-			var copipedata = DataSchema.Parse(xml);
+                this.LoadCopipeData( path );
 
-			this.datasource.Clear();
-			this.datasource.AddRange( copipedata );
+                this.CreateCopipeButtons();
 
-			CreateCopipeButtons();	
+                this.SetOpenFolderLink( path );
+            }
+            catch (Exception ex)
+            {
+                this.Enabled = false;
+                MessageBox.Show(ex.Message);
+            }
 		}
-		private void CreateCopipeButtons()
+
+        private void LoadCopipeData(string path)
+        {
+            string xml = File.ReadAllText( path );
+
+            var data = DataSchema.Parse( xml );
+
+            this.datasource.Clear();
+            this.datasource.AddRange( data );
+        }
+        
+        private void CreateCopipeButtons()
 		{
 			int x = 1;
 			int y = 1;
@@ -89,6 +111,21 @@ namespace CopipeToolBeta
 			// コントロールを追加し終えたら最後にオートスクロールをオンにする。
 			this.panel1.AutoScroll = true;
 		}
-		#endregion
-	}
+
+        private void SetOpenFolderLink(string path)
+        {
+            FileInfo file = new FileInfo( path );
+            string fullpath = file.FullName;
+
+            this.linkOpenDat.Click += (s, args) =>
+            {
+                // Explorerを /select オプション指定で叩く。
+                System.Diagnostics.Process.Start( 
+                    "EXPLORER.EXE", 
+                    $@"/select,""{fullpath}""" 
+                );
+            };
+        }
+        #endregion
+    }
 }
