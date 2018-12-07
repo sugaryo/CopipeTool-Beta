@@ -26,14 +26,16 @@ namespace CopipeToolBeta
 		#region Load
 		private void Form_Load( object sender, EventArgs e )
 		{
-			string xml = File.ReadAllText("Data/dat.xml");
+#warning パスは外部定義化した方がいい。
+#warning 相対パス起点も念の為exeのLocation拾って来るか。
+            string xml = File.ReadAllText( "Data/dat.xml" );
 
-			var copipedata = DataSchema.Parse(xml);
+			var copipedata = DataSchema.Parse( xml );
 
 			this.datasource.Clear();
 			this.datasource.AddRange( copipedata );
 
-			CreateCopipeButtons();	
+			CreateCopipeButtons();
 		}
 		private void CreateCopipeButtons()
 		{
