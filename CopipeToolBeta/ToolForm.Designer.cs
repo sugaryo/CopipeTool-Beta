@@ -1,6 +1,6 @@
 ﻿namespace CopipeToolBeta
 {
-	partial class Form1
+	partial class ToolForm
 	{
 		/// <summary>
 		/// 必要なデザイナー変数です。
@@ -58,7 +58,7 @@
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.Text = "こぴぺつーる β";
 			this.TopMost = true;
-			this.Load += new System.EventHandler(this.Form1_Load);
+			this.Load += new System.EventHandler(this.Form_Load);
 			this.ResumeLayout(false);
 
 		}

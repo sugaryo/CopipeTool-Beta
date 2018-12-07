@@ -14,17 +14,17 @@ using static CopipeToolBeta.Data.DataSchema;
 
 namespace CopipeToolBeta
 {
-	public partial class Form1 : Form
+	public partial class ToolForm : Form
 	{
 		private readonly List<CopipeData> datasource = new List<CopipeData>();
 
-		public Form1()
+		public ToolForm()
 		{
 			InitializeComponent();
 		}
 
 		#region Load
-		private void Form1_Load( object sender, EventArgs e )
+		private void Form_Load( object sender, EventArgs e )
 		{
 			string xml = File.ReadAllText("Data/dat.xml");
 
