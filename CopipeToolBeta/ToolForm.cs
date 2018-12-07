@@ -18,26 +18,46 @@ namespace CopipeToolBeta
 	{
 		private readonly List<CopipeData> datasource = new List<CopipeData>();
 
-		public ToolForm()
+        #region ctor
+        public ToolForm()
 		{
 			InitializeComponent();
 		}
+        #endregion
 
 		#region Load
 		private void Form_Load( object sender, EventArgs e )
 		{
+            try
+            {
 #warning パスは外部定義化した方がいい。
 #warning 相対パス起点も念の為exeのLocation拾って来るか。
-            string xml = File.ReadAllText( "Data/dat.xml" );
+                string path = "Data/dat.xml";
 
-			var copipedata = DataSchema.Parse( xml );
+                this.LoadCopipeData( path );
 
-			this.datasource.Clear();
-			this.datasource.AddRange( copipedata );
+                this.CreateCopipeButtons();
 
-			CreateCopipeButtons();
+                this.SetOpenFolderLink( path );
+            }
+            catch (Exception ex)
+            {
+                this.Enabled = false;
+                MessageBox.Show(ex.Message);
+            }
 		}
-		private void CreateCopipeButtons()
+
+        private void LoadCopipeData(string path)
+        {
+            string xml = File.ReadAllText( path );
+
+            var data = DataSchema.Parse( xml );
+
+            this.datasource.Clear();
+            this.datasource.AddRange( data );
+        }
+        
+        private void CreateCopipeButtons()
 		{
 			int x = 1;
 			int y = 1;
@@ -91,6 +111,21 @@ namespace CopipeToolBeta
 			// コントロールを追加し終えたら最後にオートスクロールをオンにする。
 			this.panel1.AutoScroll = true;
 		}
-		#endregion
-	}
+
+        private void SetOpenFolderLink(string path)
+        {
+            FileInfo file = new FileInfo( path );
+            string fullpath = file.FullName;
+
+            this.linkOpenDat.Click += (s, args) =>
+            {
+                // Explorerを /select オプション指定で叩く。
+                System.Diagnostics.Process.Start( 
+                    "EXPLORER.EXE", 
+                    $@"/select,""{fullpath}""" 
+                );
+            };
+        }
+        #endregion
+    }
 }
