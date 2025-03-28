@@ -16,8 +16,6 @@ namespace CopipeToolBeta
 {
 	public partial class ToolForm : Form
 	{
-        private readonly List<Button> buttons = new List<Button>();
-
         #region ctor
         public ToolForm()
 		{
@@ -85,8 +83,6 @@ namespace CopipeToolBeta
 
                 // datasource からコピペボタンを生成する。
                 var buttons = this.CreateCopipeButtons( datasource );
-                this.buttons.Clear();
-                this.buttons.AddRange( buttons );
                 this.panel1.Controls.Clear();
                 this.panel1.Controls.AddRange( buttons.ToArray() );
 
@@ -118,8 +114,7 @@ namespace CopipeToolBeta
             var tags = datasource.AsEnumerable()
                 .Where( x => !string.IsNullOrWhiteSpace( x.tag ) )
                 .Select( x => x.tag )
-                .Distinct()
-                .OrderBy( x => x );
+                .Distinct();
 
             foreach (string tag in tags)
             {
@@ -147,7 +142,9 @@ namespace CopipeToolBeta
             string tag = check.Text;
 
             // タグに紐づくボタンの有効状態を変更する。
-            foreach (Button button in this.buttons
+            foreach (Button button in this.panel1
+                    .Controls
+                    .OfType<Button>()
                     .Where( x => x.Tag as string == tag ))
             {
                 button.Visible = check.Checked;
@@ -206,7 +203,10 @@ namespace CopipeToolBeta
             void DoLayout()
             {
                 int dy = 0;
-                foreach (Button button in this.buttons.Where( x => x.Visible ) )
+                foreach (Button button in this.panel1
+                        .Controls
+                        .OfType<Button>()
+                        .Where( x => x.Visible ) )
                 {
                     button.Location = new Point( 1, 1 + dy );
                     dy += button.Height + 1;
