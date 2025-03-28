@@ -59,57 +59,68 @@ namespace CopipeToolBeta
         
         private void CreateCopipeButtons()
 		{
-			int x = 1;
-			int y = 1;
-
-			int h = 36;
-			int dy = h + 1;
-
-			int w = this.panel1.Width - 4;
-
-
-			// 追加している最中にスクロールバー表示の閾値を超えると幅が崩れるので一旦オフる。
-			this.panel1.AutoScroll = false;
-
-			// ツールチップ
-			var tooltip = new ToolTip();
-
-			List<Button> buttons = new List<Button>();
-			foreach ( CopipeData data in this.datasource )
+			// 局所関数：
+			void CreateButtons() 
 			{
-				// コピペデータごとにコピペ用ボタンを生成してパネルに入れる。
-				Button button = new Button();
-				buttons.Add( button );
+                int x = 1;
+                int y = 1;
 
-				this.panel1.Controls.Add( button );
+                int h = 36;
+                int dy = h + 1;
+
+                int w = this.panel1.Width - 4;
+
+                // ツールチップ
+                var tooltip = new ToolTip();
+
+                List<Button> buttons = new List<Button>();
+                foreach (CopipeData data in this.datasource)
+                {
+                    // コピペデータごとにコピペ用ボタンを生成してパネルに入れる。
+                    Button button = new Button();
+                    buttons.Add( button );
+
+                    this.panel1.Controls.Add( button );
 
 
 
-				button.Text = data.title;
-				button.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-				button.FlatStyle = FlatStyle.Flat;
-				button.Width = w;
-				button.Height = h;
+                    button.Text = data.title;
+                    button.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+                    button.FlatStyle = FlatStyle.Flat;
+                    button.Width = w;
+                    button.Height = h;
 
 
-				// ツールチップ
-				tooltip.SetToolTip( button, data.Value );
+                    // ツールチップ
+                    tooltip.SetToolTip( button, data.Value );
 
 
-				// コピペ処理
-				button.Click += ( s, a ) =>
-				{
-					Clipboard.Clear();
-					Clipboard.SetText( data.Value );
-				};
-				
-				// 座標設定してインクリメント（StackPanel的なアレ）
-				button.Location = new Point( x, y );
-				y += dy;
-			}
+                    // コピペ処理
+                    button.Click += (s, a) =>
+                    {
+                        Clipboard.Clear();
+                        Clipboard.SetText( data.Value );
+                    };
 
-			// コントロールを追加し終えたら最後にオートスクロールをオンにする。
-			this.panel1.AutoScroll = true;
+                    // 座標設定してインクリメント（StackPanel的なアレ）
+                    button.Location = new Point( x, y );
+                    y += dy;
+                }
+            }
+
+            try
+            {
+                // 追加している最中にスクロールバー表示の閾値を超えると幅が崩れるので一旦オフる。
+                this.panel1.AutoScroll = false;
+
+                // コピペデータを基にボタンを生成する。
+                CreateButtons();
+            }
+            finally
+            {
+			    // コントロールを追加し終えたら最後にオートスクロールをオンにする。
+			    this.panel1.AutoScroll = true;
+            }
 		}
 
         private void SetOpenFolderLink(string path)
