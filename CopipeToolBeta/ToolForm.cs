@@ -72,39 +72,39 @@ namespace CopipeToolBeta
 			this.panel1.AutoScroll = false;
 
 			// ツールチップ
-			var tip = new ToolTip();
+			var tooltip = new ToolTip();
 
 			List<Button> buttons = new List<Button>();
 			foreach ( CopipeData data in this.datasource )
 			{
 				// コピペデータごとにコピペ用ボタンを生成してパネルに入れる。
-				Button b = new Button();
-				buttons.Add( b );
+				Button button = new Button();
+				buttons.Add( button );
 
-				this.panel1.Controls.Add( b );
+				this.panel1.Controls.Add( button );
 
 
 
-				b.Text = data.title;
-				b.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-				b.FlatStyle = FlatStyle.Flat;
-				b.Width = w;
-				b.Height = h;
+				button.Text = data.title;
+				button.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+				button.FlatStyle = FlatStyle.Flat;
+				button.Width = w;
+				button.Height = h;
 
 
 				// ツールチップ
-				tip.SetToolTip( b, data.Value );
+				tooltip.SetToolTip( button, data.Value );
 
 
 				// コピペ処理
-				b.Click += ( s, a ) =>
+				button.Click += ( s, a ) =>
 				{
 					Clipboard.Clear();
 					Clipboard.SetText( data.Value );
 				};
 				
 				// 座標設定してインクリメント（StackPanel的なアレ）
-				b.Location = new Point( x, y );
+				button.Location = new Point( x, y );
 				y += dy;
 			}
 
