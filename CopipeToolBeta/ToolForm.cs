@@ -16,6 +16,8 @@ namespace CopipeToolBeta
 {
 	public partial class ToolForm : Form
 	{
+        private readonly List<Button> buttons = new List<Button>();
+
         #region ctor
         public ToolForm()
 		{
@@ -36,10 +38,20 @@ namespace CopipeToolBeta
 
                 var datasource = this.LoadCopipeData( path );
 
+                // datasource.tag からチェックボックスを生成する。
+                var checks = this.CreateTagCheckButtons( datasource );
+                this.flowLayoutPanel1.Controls.Clear();
+                this.flowLayoutPanel1.Controls.AddRange( checks.ToArray() );
+                
+                // datasource からコピペボタンを生成する。
                 var buttons = this.CreateCopipeButtons( datasource );
+                this.buttons.Clear();
+                this.buttons.AddRange( buttons );
+                this.panel1.Controls.Clear();
+                this.panel1.Controls.AddRange( buttons.ToArray() );
 
-                this.LayoutButtons( buttons );
-
+                // ボタンの初期レイアウト。
+                this.LayoutButtons();
 
                 this.MinimumSize = this.Size;
             }
@@ -49,14 +61,65 @@ namespace CopipeToolBeta
                 MessageBox.Show(ex.Message);
             }
 		}
-
+        // xml データのロード。
         private IEnumerable<CopipeData> LoadCopipeData(string path)
         {
             string xml = File.ReadAllText( path );
 
             return DataSchema.Parse( xml );
         }
-        
+        #endregion
+
+        #region チェックボックス（ボタン型）
+        private List<CheckBox> CreateTagCheckButtons(IEnumerable<CopipeData> datasource)
+        {
+            var checks = new List<CheckBox>();
+
+            var tags = datasource.AsEnumerable()
+                .Where( x => !string.IsNullOrWhiteSpace( x.tag ) )
+                .Select( x => x.tag )
+                .Distinct()
+                .OrderBy( x => x );
+
+            foreach (string tag in tags)
+            {
+                CheckBox check = new CheckBox();
+                check.Appearance = Appearance.Button;
+                check.Text = tag;
+                check.AutoSize = true;
+                check.FlatStyle = FlatStyle.Flat;
+                check.Checked = true;
+                check.ForeColor = Color.Green;
+                check.BackColor = Color.LightGreen;
+
+                check.CheckedChanged += OnTagCheckedChanged;
+
+                checks.Add( check );
+            }
+            return checks;
+        }
+
+        private void OnTagCheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox check = sender as CheckBox;
+            check.ForeColor = check.Checked ? Color.Green : Color.DarkRed;
+            check.BackColor = check.Checked ? Color.LightGreen : Color.LightCoral;
+            string tag = check.Text;
+
+            // タグに紐づくボタンの有効状態を変更する。
+            foreach (Button button in this.buttons
+                    .Where( x => x.Tag as string == tag ))
+            {
+                button.Visible = check.Checked;
+                button.Enabled = check.Checked;
+            }
+
+            // 更新されたボタンの有効状態で再レイアウトする。
+            this.LayoutButtons();
+        }
+        #endregion
+
+        #region コピペボタン
         private List<Button> CreateCopipeButtons(IEnumerable<CopipeData> datasource)
 		{
             var buttons = new List<Button>();
@@ -71,8 +134,10 @@ namespace CopipeToolBeta
                 // コピペデータごとにコピペ用ボタンを生成してパネルに入れる。
                 Button button = new Button();
                 button.Text = data.title;
+                button.Tag = data.tag;
                 button.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
                 button.FlatStyle = FlatStyle.Flat;
+                button.BackColor = Color.White;
                 button.Width = w;
                 button.Height = h;
 
@@ -92,23 +157,19 @@ namespace CopipeToolBeta
             return buttons;
 		}
 
-        private void LayoutButtons(IEnumerable<Button> buttons)
+        #endregion
+
+        #region ボタンのレイアウト処理（StackPanel風）
+        private void LayoutButtons()
         {
-            // 局所関数：
+            // 可視状態のボタンを縦に並べるローカルメソッド：
             void DoLayout()
             {
-                int x = 1;
-                int y = 1;
-
-                this.panel1.Controls.Clear();
-                foreach (Button button in buttons)
+                int dy = 0;
+                foreach (Button button in this.buttons.Where( x => x.Visible ) )
                 {
-                    this.panel1.Controls.Add( button );
-
-                    // 座標設定してインクリメント（StackPanel的なアレ）
-                    button.Location = new Point( x, y );
-                    int dy = button.Height + 1;
-                    y += dy;
+                    button.Location = new Point( 1, 1 + dy );
+                    dy += button.Height + 1;
                 }
             }
 
@@ -122,12 +183,13 @@ namespace CopipeToolBeta
             }
             finally
             {
-                // コントロールを追加し終えたら最後にオートスクロールをオンにする。
+                // レイアウトし終えたら最後にオートスクロールをオンにする。
                 this.panel1.AutoScroll = true;
             }
         }
+        #endregion
 
-
+        #region フォルダを開く...
         private void SetOpenFolderLink(string path)
         {
             FileInfo file = new FileInfo( path );
