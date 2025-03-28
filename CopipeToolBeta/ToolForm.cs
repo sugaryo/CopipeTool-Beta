@@ -16,8 +16,6 @@ namespace CopipeToolBeta
 {
 	public partial class ToolForm : Form
 	{
-		private readonly List<CopipeData> datasource = new List<CopipeData>();
-
         #region ctor
         public ToolForm()
 		{
@@ -34,9 +32,9 @@ namespace CopipeToolBeta
 #warning 相対パス起点も念の為exeのLocation拾って来るか。
                 string path = "Data/dat.xml";
 
-                this.LoadCopipeData( path );
+                var datasource = this.LoadCopipeData( path );
 
-                this.CreateCopipeButtons();
+                this.CreateCopipeButtons( datasource );
 
                 this.SetOpenFolderLink( path );
             }
@@ -47,17 +45,14 @@ namespace CopipeToolBeta
             }
 		}
 
-        private void LoadCopipeData(string path)
+        private IEnumerable<CopipeData> LoadCopipeData(string path)
         {
             string xml = File.ReadAllText( path );
 
-            var data = DataSchema.Parse( xml );
-
-            this.datasource.Clear();
-            this.datasource.AddRange( data );
+            return DataSchema.Parse( xml );
         }
         
-        private void CreateCopipeButtons()
+        private void CreateCopipeButtons(IEnumerable<CopipeData> datasource)
 		{
 			// 局所関数：
 			void CreateButtons() 
@@ -73,7 +68,7 @@ namespace CopipeToolBeta
                 // ツールチップ
                 var tooltip = new ToolTip();
 
-                foreach (CopipeData data in this.datasource)
+                foreach (CopipeData data in datasource)
                 {
                     // コピペデータごとにコピペ用ボタンを生成してパネルに入れる。
                     Button button = new Button();
