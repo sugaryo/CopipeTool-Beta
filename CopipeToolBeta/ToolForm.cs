@@ -39,6 +39,9 @@ namespace CopipeToolBeta
                 var buttons = this.CreateCopipeButtons( datasource );
 
                 this.LayoutButtons( buttons );
+
+
+                this.MinimumSize = this.Size;
             }
             catch (Exception ex)
             {
