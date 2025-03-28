@@ -77,21 +77,14 @@ namespace CopipeToolBeta
                 {
                     // コピペデータごとにコピペ用ボタンを生成してパネルに入れる。
                     Button button = new Button();
-
-                    this.panel1.Controls.Add( button );
-
-
-
                     button.Text = data.title;
                     button.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
                     button.FlatStyle = FlatStyle.Flat;
                     button.Width = w;
                     button.Height = h;
 
-
                     // ツールチップ
                     tooltip.SetToolTip( button, data.Value );
-
 
                     // コピペ処理
                     button.Click += (s, a) =>
@@ -103,6 +96,9 @@ namespace CopipeToolBeta
                     // 座標設定してインクリメント（StackPanel的なアレ）
                     button.Location = new Point( x, y );
                     y += dy;
+
+                    // パネルに追加。
+                    this.panel1.Controls.Add( button );
                 }
             }
 
