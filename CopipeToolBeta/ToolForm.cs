@@ -40,8 +40,12 @@ namespace CopipeToolBeta
 
                 // datasource.tag からチェックボックスを生成する。
                 var checks = this.CreateTagCheckButtons( datasource );
-                this.flowLayoutPanel1.Controls.Clear();
-                this.flowLayoutPanel1.Controls.AddRange( checks.ToArray() );
+                if (checks.Count != 0)
+                {
+                    this.flowLayoutPanel1.Controls.Clear();
+                    this.flowLayoutPanel1.Controls.AddRange( checks.ToArray() );
+                }
+                
                 
                 // datasource からコピペボタンを生成する。
                 var buttons = this.CreateCopipeButtons( datasource );

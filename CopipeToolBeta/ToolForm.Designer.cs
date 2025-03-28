@@ -32,10 +32,12 @@
             this.linkOpenDat = new System.Windows.Forms.LinkLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.label404 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -47,7 +49,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(160, 211);
+            this.panel1.Size = new System.Drawing.Size(160, 217);
             this.panel1.TabIndex = 0;
             // 
             // linkOpenDat
@@ -77,18 +79,30 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.panel1);
             this.splitContainer1.Size = new System.Drawing.Size(160, 269);
-            this.splitContainer1.SplitterDistance = 54;
+            this.splitContainer1.SplitterDistance = 48;
             this.splitContainer1.TabIndex = 2;
             // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.BackColor = System.Drawing.Color.Honeydew;
             this.flowLayoutPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.flowLayoutPanel1.Controls.Add(this.label404);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(160, 54);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(160, 48);
             this.flowLayoutPanel1.TabIndex = 0;
+            // 
+            // label404
+            // 
+            this.label404.AutoSize = true;
+            this.label404.ForeColor = System.Drawing.Color.SeaGreen;
+            this.label404.Location = new System.Drawing.Point(5, 5);
+            this.label404.Margin = new System.Windows.Forms.Padding(5);
+            this.label404.Name = "label404";
+            this.label404.Size = new System.Drawing.Size(136, 36);
+            this.label404.TabIndex = 0;
+            this.label404.Text = "タグ付きのデータがありません。";
             // 
             // ToolForm
             // 
@@ -110,6 +124,8 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -121,6 +137,7 @@
         private System.Windows.Forms.LinkLabel linkOpenDat;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Label label404;
     }
 }
 
