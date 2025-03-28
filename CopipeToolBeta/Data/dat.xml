@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Copipe>
 
-  <Data title="ほげほげー">
+  <Data title="ほげほげー" tag="aa">
     <![CDATA[hogehoge]]>
   </Data>
 
-  <Data title="もげもげー">
+  <Data title="もげもげー" tag="aa">
     <![CDATA[mogemoge]]>
   </Data>
 
-  <Data title="ぴよぴよ">CDATAセクションはあってもなくても。</Data>
+  <Data title="ぴよぴよー" tag="aa">CDATAセクションはあってもなくても。</Data>
   
-  <Data title="長い長い長い長いデータ"><![CDATA[寿限無寿限無
+  <Data title="長い長い長い長いデータ" tag="bbbb"><![CDATA[寿限無寿限無
 五劫の擦り切れ
 海砂利水魚の
 水行末 雲来末 風来末
@@ -21,5 +21,15 @@
 シューリンガンのグーリンダイ
 グーリンダイのポンポコピーのポンポコナーの
 長久命の長助]]></Data>
+
+  <Data title="test 1" tag="test">test_data_1</Data>
+  <Data title="test 2" tag="test">test_data_2</Data>
+  <Data title="test 3" tag="test">test_data_3</Data>
+  <Data title="test 4" tag="test">test_data_4</Data>
+  <Data title="test 5" tag="test">test_data_5</Data>
+  <Data title="test 6" tag="test">test_data_6</Data>
+  <Data title="test 7" tag="test">test_data_7</Data>
+  <Data title="test 8" tag="test">test_data_8</Data>
+  <Data title="test 9" tag="test">test_data_9</Data>
 
 </Copipe>

@@ -45,8 +45,12 @@ namespace CopipeToolBeta.Data
 			[System.Xml.Serialization.XmlAttributeAttribute()]
 			public string title { get; set; }
 
-			/// <remarks/>
-			[System.Xml.Serialization.XmlTextAttribute()]
+            /// <remarks/>
+            [System.Xml.Serialization.XmlAttributeAttribute()]
+            public string tag { get; set; }
+
+            /// <remarks/>
+            [System.Xml.Serialization.XmlTextAttribute()]
 			public string Value{ get; set; }
 		}
 
