@@ -43,10 +43,46 @@ namespace CopipeToolBeta
                 if (checks.Count != 0)
                 {
                     this.flowLayoutPanel1.Controls.Clear();
+                    // タグ由来のカテゴリチェックボタンを作っていた場合は、
+                    // 『全オン／全オフ』のボタンも生成する。
+                    Button onButton = new Button() {
+                            AutoSize = true,
+                            Width = 24,
+                            Text = "<ON>",
+                            FlatStyle = FlatStyle.Flat,
+                            ForeColor = Color.Blue,
+                            BackColor = Color.White,
+                    };
+                    onButton.Click += (s, a) =>
+                    {
+                        foreach (CheckBox check in checks)
+                        {
+                            check.Checked = true;
+                        }
+                    };
+                    this.flowLayoutPanel1.Controls.Add( onButton );
+                    Button offButton = new Button() { 
+                            AutoSize = true,
+                            Width = 24,
+                            Text = "<OFF>",
+                            FlatStyle = FlatStyle.Flat,
+                            ForeColor = Color.Red,
+                            BackColor = Color.White,
+                    };
+                    offButton.Click += (s, a) =>
+                    {
+                        foreach (CheckBox check in checks)
+                        {
+                            check.Checked = false;
+                        }
+                    };
+                    this.flowLayoutPanel1.Controls.Add( offButton );
+
+    
+                    // タグチェックボタンを追加。
                     this.flowLayoutPanel1.Controls.AddRange( checks.ToArray() );
                 }
-                
-                
+
                 // datasource からコピペボタンを生成する。
                 var buttons = this.CreateCopipeButtons( datasource );
                 this.buttons.Clear();
