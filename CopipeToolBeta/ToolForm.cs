@@ -89,7 +89,15 @@ namespace CopipeToolBeta
                 // ボタンの初期レイアウト。
                 this.LayoutButtons();
 
+
+                // デザイナ時のサイズを最小サイズに設定。
                 this.MinimumSize = this.Size;
+
+                // 表示時に初期サイズ設定。
+                this.Shown += (s, a) =>
+                {
+                    this.Size = new Size( 320, 600 );
+                };
             }
             catch (Exception ex)
             {
