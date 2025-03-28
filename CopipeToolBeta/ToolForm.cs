@@ -32,11 +32,13 @@ namespace CopipeToolBeta
 #warning 相対パス起点も念の為exeのLocation拾って来るか。
                 string path = "Data/dat.xml";
 
+                this.SetOpenFolderLink( path );
+
                 var datasource = this.LoadCopipeData( path );
 
-                this.CreateCopipeButtons( datasource );
+                var buttons = this.CreateCopipeButtons( datasource );
 
-                this.SetOpenFolderLink( path );
+                this.LayoutButtons( buttons );
             }
             catch (Exception ex)
             {
@@ -52,48 +54,58 @@ namespace CopipeToolBeta
             return DataSchema.Parse( xml );
         }
         
-        private void CreateCopipeButtons(IEnumerable<CopipeData> datasource)
+        private List<Button> CreateCopipeButtons(IEnumerable<CopipeData> datasource)
 		{
-			// 局所関数：
-			void CreateButtons() 
-			{
+            var buttons = new List<Button>();
+
+            // ツールチップ
+            var tooltip = new ToolTip();
+
+            int h = 36;
+            int w = this.panel1.Width - 4;
+            foreach (CopipeData data in datasource)
+            {
+                // コピペデータごとにコピペ用ボタンを生成してパネルに入れる。
+                Button button = new Button();
+                button.Text = data.title;
+                button.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+                button.FlatStyle = FlatStyle.Flat;
+                button.Width = w;
+                button.Height = h;
+
+                // ツールチップ
+                tooltip.SetToolTip( button, data.Value );
+
+                // コピペ処理
+                button.Click += (s, a) =>
+                {
+                    Clipboard.Clear();
+                    Clipboard.SetText( data.Value );
+                };
+
+                // リストに追加。
+                buttons.Add( button );
+            }
+            return buttons;
+		}
+
+        private void LayoutButtons(IEnumerable<Button> buttons)
+        {
+            // 局所関数：
+            void DoLayout()
+            {
                 int x = 1;
                 int y = 1;
 
-                int h = 36;
-                int dy = h + 1;
-
-                int w = this.panel1.Width - 4;
-
-                // ツールチップ
-                var tooltip = new ToolTip();
-
-                foreach (CopipeData data in datasource)
+                this.panel1.Controls.Clear();
+                foreach (Button button in buttons)
                 {
-                    // コピペデータごとにコピペ用ボタンを生成してパネルに入れる。
-                    Button button = new Button();
-                    button.Text = data.title;
-                    button.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-                    button.FlatStyle = FlatStyle.Flat;
-                    button.Width = w;
-                    button.Height = h;
-
-                    // ツールチップ
-                    tooltip.SetToolTip( button, data.Value );
-
-                    // コピペ処理
-                    button.Click += (s, a) =>
-                    {
-                        Clipboard.Clear();
-                        Clipboard.SetText( data.Value );
-                    };
+                    this.panel1.Controls.Add( button );
 
                     // 座標設定してインクリメント（StackPanel的なアレ）
                     button.Location = new Point( x, y );
+                    int dy = button.Height + 1;
                     y += dy;
-
-                    // パネルに追加。
-                    this.panel1.Controls.Add( button );
                 }
             }
 
@@ -103,14 +115,15 @@ namespace CopipeToolBeta
                 this.panel1.AutoScroll = false;
 
                 // コピペデータを基にボタンを生成する。
-                CreateButtons();
+                DoLayout();
             }
             finally
             {
-			    // コントロールを追加し終えたら最後にオートスクロールをオンにする。
-			    this.panel1.AutoScroll = true;
+                // コントロールを追加し終えたら最後にオートスクロールをオンにする。
+                this.panel1.AutoScroll = true;
             }
-		}
+        }
+
 
         private void SetOpenFolderLink(string path)
         {
