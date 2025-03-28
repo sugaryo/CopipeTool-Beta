@@ -73,12 +73,10 @@ namespace CopipeToolBeta
                 // ツールチップ
                 var tooltip = new ToolTip();
 
-                List<Button> buttons = new List<Button>();
                 foreach (CopipeData data in this.datasource)
                 {
                     // コピペデータごとにコピペ用ボタンを生成してパネルに入れる。
                     Button button = new Button();
-                    buttons.Add( button );
 
                     this.panel1.Controls.Add( button );
 
